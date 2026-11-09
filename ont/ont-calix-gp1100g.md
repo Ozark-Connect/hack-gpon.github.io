@@ -41,7 +41,15 @@ The bootloader does not stop on Enter. During the 5-second autoboot countdown,
 type `stop` to drop to the `PRX300 #` U-Boot prompt.
 :::
 
-<!-- TODO: add UART header pinout photo (ImageFigure file="ont-calix-gp1100g_ttl.jpg") -->
+The UART header is the 4-pin block on the right edge of the board, next to the
+RJ45 cage (see [Teardown](#teardown-and-other-photos)).
+
+::: warning Note
+The TX/RX assignment on the header is not yet confirmed. The port is 3.3V TTL:
+if you get no output, swap TX and RX and retry. Do not connect the VCC pin.
+:::
+
+<!-- TODO: add a labelled UART pinout close-up (GND / TX / RX / VCC) -->
 
 # Root procedure
 
@@ -249,3 +257,7 @@ ipaddr:   192.168.1.1   serverip: 192.168.1.2 (tftpboot supported)
 - [Calix GigaPoint ONTs](https://www.calix.com/platforms/premises-systems.html)
 - [Calix 100-05609 GPON ONT SFP](/ont-calix-100-05609) — the SFP sibling that
   runs the same EXOS stack inside the GigaSpire u6x
+
+# Teardown and other photos
+
+<ImageFigure file="ont-calix-gp1100g_teardown.png" alt="Calix GP1100G board" caption="Calix GP1100G: board with UART leads attached. MaxLinear PRX300 SoC (center), SC/APC fiber pigtail (white loop), NAND flash, and the 4-pin UART header on the right edge next to the RJ45 cage." />
