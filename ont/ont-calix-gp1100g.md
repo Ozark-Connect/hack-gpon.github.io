@@ -41,12 +41,22 @@ The bootloader does not stop on Enter. During the 5-second autoboot countdown,
 type `stop` to drop to the `PRX300 #` U-Boot prompt.
 :::
 
-The UART header is the 4-pin block on the right edge of the board, next to the
-RJ45 cage (see [Teardown](#teardown-and-other-photos)).
+The 4-pin UART header is on the right edge of the board, by the RJ45 cage (see
+[Teardown](#teardown-and-other-photos)). The leads in that photo use the standard
+USB-TTL colour code:
+
+| Wire  | Signal                              |
+| ----- | ----------------------------------- |
+| Red   | VCC — leave unconnected             |
+| Black | GND                                 |
+| Green | adapter TX → ONT RX                 |
+| White | adapter RX → ONT TX                 |
+
+The port is 3.3V TTL, 115200 8-N-1.
 
 ::: warning Note
-The TX/RX assignment on the header is not yet confirmed. The port is 3.3V TTL:
-if you get no output, swap TX and RX and retry. Do not connect the VCC pin.
+Some USB-TTL adapters label TX and RX the other way around: swap them if there is
+no output.
 :::
 
 <!-- TODO: add a labelled UART pinout close-up (GND / TX / RX / VCC) -->
