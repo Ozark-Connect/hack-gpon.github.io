@@ -41,25 +41,24 @@ The bootloader does not stop on Enter. During the 5-second autoboot countdown,
 type `stop` to drop to the `PRX300 #` U-Boot prompt.
 :::
 
-The 4-pin UART header is on the right edge of the board, by the RJ45 cage (see
-[Teardown](#teardown-and-other-photos)). The leads in that photo use the standard
-USB-TTL colour code:
+The board has an unpopulated 4-pin UART footprint, silkscreened `CN1`, on the
+right edge by the RJ45 cage (see [Teardown](#teardown-and-other-photos)); solder
+a header on. The port is 3.3V TTL, 115200 8-N-1. A separate 2-pin header beside
+it is silkscreened `CN2` (purpose unconfirmed).
 
-| Wire  | Signal                              |
-| ----- | ----------------------------------- |
-| Red   | VCC — leave unconnected             |
-| Black | GND                                 |
-| Green | adapter TX → ONT RX                 |
-| White | adapter RX → ONT TX                 |
+Pinout, counting from the pin closest to the optic/power connector (the GND pin is
+silkscreened `GND`):
 
-The port is 3.3V TTL, 115200 8-N-1.
+| Pin | Signal                   |
+| --- | ------------------------ |
+| 1   | GND (marked)             |
+| 2   | ONT RX                   |
+| 3   | ONT TX                   |
+| 4   | VCC — leave disconnected |
 
-::: warning Note
-Some USB-TTL adapters label TX and RX the other way around: swap them if there is
-no output.
-:::
-
-<!-- TODO: add a labelled UART pinout close-up (GND / TX / RX / VCC) -->
+With a standard PL2303 USB-TTL cable (white = TXD, green = RXD, black = GND, red
+= VCC): white to pin 2 (ONT RX), green to pin 3 (ONT TX), black to pin 1 (GND).
+Leave the red VCC lead disconnected.
 
 # Root procedure
 
@@ -69,8 +68,8 @@ module is never loaded, so IPv6 traffic bypasses the firewall. Any device on the
 same L2 segment reaches a root shell over the ONT's IPv6 link-local address. No
 UART and no firmware modification are needed.
 
-The same bypass works on other Calix EXOS devices (the 100-05609 SFP and the
-GigaSpire u6x). Credentials are the hardcoded `support` / `support`.
+The same bypass works on other GP1100-family Calix EXOS ONTs. Credentials are the
+hardcoded `support` / `support`.
 
 ::: warning Note
 The ONT's IPv6 link-local address is **not** derived from the LAN MAC via EUI-64.
@@ -217,6 +216,12 @@ gates on them, set them through `clx_gpon_pw` or the Calix Smart Activate UI.
 After linking, the OLT pushed the MIB reset/upload, ONU-G / ONU2-G / Software
 Image queries, T-CONT and GEM provisioning, and Calix-proprietary ME 241
 configuration. The stock EXOS firmware answered every ME correctly.
+
+Reaching `O5` is not the same as working service. On a subscriber provisioned as
+an RG (the Calix u6x case), the GP1100G completes the OMCI exchange but does not
+come into service: it reports `gw_support=0` and cannot instantiate the Calix RG
+config ME (ME 65317) the OLT pushes, so provisioning stops short of a data path.
+Work on this is ongoing in the 8311 Discord community.
 
 # Recovery from a bad NVRAM write
 
